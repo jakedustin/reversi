@@ -1,3 +1,5 @@
+## ALL CODE IS COURTESY OF [JOSHUA ROBINSON](https://github.com/joshua-robinson) UNLESS OTHERWISE NOTED
+
 # cs-470-reversi-python-client
 
 A Python 3 client for the BYU CS 470 Reversi lab. All that you need to change for your project is the `make_move` function in the reversi_bot.py script. See comment there for information on useful functionality. 
