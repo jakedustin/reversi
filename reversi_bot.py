@@ -1,5 +1,6 @@
 import numpy as np
 import random as rand
+import math
 import reversi
 
 class ReversiBot:
@@ -29,3 +30,36 @@ class ReversiBot:
 
         move = rand.choice(valid_moves) # Moves randomly...for now
         return move
+
+
+    def minimax(position, depth, maximizingPlayer):
+        if depth == 0 or game over in position
+		    return static evaluation of position
+
+        if maximizingPlayer
+            maxEval = -math.inf
+            for each child of position
+                eval = minimax(child, depth - 1, False)
+                maxEval = max(maxEval, eval)
+            return maxEval
+
+        else
+            minEval = math.inf
+            for each child of position
+                eval = minimax(child, depth - 1, True)
+                minEval = min(minEval, eval)
+            return minEval
+
+    def alphabeta(position, depth, alpha, beta, maximizingPlayer)
+        if depth == 0 or game over in position
+            return static evaluation of position
+
+        if maximizingPlayer
+            maxEval = -infinity
+            for each child of position
+                eval = alphabeta(child, depth - 1, alpha, beta false)
+                maxEval = max(maxEval, eval)
+                alpha = max(alpha, eval)
+                if beta <= alpha
+                    break
+            return maxEval
