@@ -3,6 +3,13 @@ import random as rand
 import math
 import reversi
 
+
+# identify an valid move and pick it 
+#implemet minimax
+#implement alphabeta
+#define heurstic eval function - check the first 5 moves and pick the best one
+
+
 class ReversiBot:
     def __init__(self, move_num):
         self.move_num = move_num
@@ -28,38 +35,22 @@ class ReversiBot:
         '''
         valid_moves = state.get_valid_moves()
 
+        #evaluate all the moves in valid_moves and return the best one 
+
         move = rand.choice(valid_moves) # Moves randomly...for now
         return move
 
 
-    def minimax(position, depth, maximizingPlayer):
-        if depth == 0 or game over in position
-		    return static evaluation of position
-
-        if maximizingPlayer
-            maxEval = -math.inf
-            for each child of position
-                eval = minimax(child, depth - 1, False)
-                maxEval = max(maxEval, eval)
-            return maxEval
-
-        else
-            minEval = math.inf
-            for each child of position
-                eval = minimax(child, depth - 1, True)
-                minEval = min(minEval, eval)
-            return minEval
-
-    def alphabeta(position, depth, alpha, beta, maximizingPlayer)
-        if depth == 0 or game over in position
-            return static evaluation of position
-
-        if maximizingPlayer
-            maxEval = -infinity
-            for each child of position
-                eval = alphabeta(child, depth - 1, alpha, beta false)
-                maxEval = max(maxEval, eval)
-                alpha = max(alpha, eval)
-                if beta <= alpha
-                    break
-            return maxEval
+    def minimax(self,curDepth, nodeIndex, maxTurn, scores, targetDepth):
+        if curDepth == targetDepth:
+            return
+        if maxTurn:
+            return max(self.minimax(curDepth + 1, nodeIndex * 2,
+                    False, scores, targetDepth),
+                   self.minimax(curDepth + 1, nodeIndex * 2 + 1,
+                    False, scores, targetDepth))
+        else:
+            return min(self.minimax(curDepth + 1, nodeIndex * 2,
+                     True, scores, targetDepth),
+                   self.minimax(curDepth + 1, nodeIndex * 2 + 1,
+                     True, scores, targetDepth))
