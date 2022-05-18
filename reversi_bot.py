@@ -54,3 +54,31 @@ class ReversiBot:
                      True, scores, targetDepth),
                    self.minimax(curDepth + 1, nodeIndex * 2 + 1,
                      True, scores, targetDepth))
+
+    def alphabeta(self,depth, nodeIndex, maximizingPlayer,
+            values, alpha, beta):
+            #if leaf is reached 
+            if depth == 3:
+                return values[nodeIndex]
+            if maximizingPlayer:
+                best = - math.inf
+                # go through all children left and right
+                for i in range(0,2):
+                    val = self.alphabeta(depth + 1, nodeIndex * 2 + i,
+                          False, values, alpha, beta)
+                    best = max(best, val)
+                    alpha = max(alpha, best)
+                    #pruning 
+                    if beta <= alpha:
+                        break
+            else:
+                best = math.inf
+                for i in range(0,2):
+                    val = self.alphabeta(depth + 1, nodeIndex * 2 + i,
+                                True, values, alpha, beta)
+                    best = min(val, best)
+                    beta = min(best, beta)
+
+                    if beta <= alpha:
+                        break
+            return best
