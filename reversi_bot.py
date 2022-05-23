@@ -41,6 +41,22 @@ class ReversiBot:
         return move
 
 
+    def findBestMove(board):
+        bestMove = None 
+        currentMove = None
+        # for each move in board
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                #if current move is better than best move:
+                    # bestMove = currentMove
+                    if currentMove > bestMove:
+                        bestMove = currentMove
+        return bestMove
+
+    
+
+
+
     def minimax(self,curDepth, nodeIndex, maxTurn, scores, targetDepth):
         if curDepth == targetDepth:
             return
