@@ -41,7 +41,7 @@ class ReversiBot:
         return move
 
 
-    def findBestMove(board):
+    def findBestMove(self, board):
         bestMove = None 
         currentMove = None
         # for each move in board
@@ -164,5 +164,4 @@ class ReversiBot:
                     count += 1
         return count
 
-    def dynamic_heuristic_evaluation_function(self, board):
 
