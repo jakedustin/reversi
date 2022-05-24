@@ -41,7 +41,7 @@ class ReversiBot:
         return move
 
 
-    def findBestMove(board):
+    def findBestMove(self, board):
         bestMove = None 
         currentMove = None
         # for each move in board
@@ -152,9 +152,9 @@ class ReversiBot:
         #get score for player 1 and 2
         score1, score2 = self.calcScore(board)
         #get values for dictionary
-        corner = [[0,0], [7,0],[0,7], [7,7]]
-        cornerAdjecents = [[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]]
-        edges = [[0,2:5], [2:5,0], [7, 2:5], [2:5,7]]
+        # corner = [[0,0], [7,0],[0,7], [7,7]]
+        # cornerAdjecents = [[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]]
+        # edges = [[0,2:5], [2:5,0], [7, 2:5], [2:5,7]]
 
         heursticValue = (strategyDict["corners"] + strategyDict["adjecentToCorners"] + strategyDict["edges"] + 
         strategyDict["totalPoints"]) * (score1 - score2)
@@ -208,5 +208,4 @@ class ReversiBot:
                     count += 1
         return count
 
- #   def dynamic_heuristic_evaluation_function(self, board):
 
