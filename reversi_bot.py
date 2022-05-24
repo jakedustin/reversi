@@ -98,3 +98,53 @@ class ReversiBot:
                     if beta <= alpha:
                         break
             return best
+
+    def canmove(self, current_turn, str):
+        if current_turn == 1:
+            opp = 2
+        else:
+            opp = 1
+
+        if (str[0] != opp):
+            return False
+
+        for i in range(1, 8):
+            if (str[i] == 0):
+                return False
+            if (str[i] == current_turn):
+                return True
+
+        return False
+
+    def is_legal_move(self, current_turn, board, startx, starty):
+        if (board[startx][starty] != 0):
+            return False
+
+        str = []
+        for dy in range(-1, 2):
+            for dx in range(-1, 2):
+                if (dy is None or dx is None):
+                    continue
+                str[0] = '\0'
+                for ctr in range(1, 8):
+                    x = startx + ctr*dx
+                    y = starty + ctr*dy
+                    if (x >= 0 and y >= 0 and x < 8 and y < 8):
+                        str[ctr-1] = board[x][y]
+                    else:
+                        str[ctr-1] = 0
+                if (self.canmove(current_turn,str)):
+                    return True
+
+        return False
+
+    def num_valid_moves(self, current_turn, board):
+        count = 0
+        for i in range(0,8):
+            for j in range(0,8):
+                if (self.is_legal_move(current_turn, board, i, j)):
+                    count += 1
+        return count
+
+    def dynamic_heuristic_evaluation_function(self, board):
+
