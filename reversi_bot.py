@@ -158,6 +158,8 @@ class ReversiBot:
 
         heursticValue = (strategyDict["corners"] + strategyDict["adjecentToCorners"] + strategyDict["edges"] + 
         strategyDict["totalPoints"]) * (score1 - score2)
+        
+        
 
         
 
