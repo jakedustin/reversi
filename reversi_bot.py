@@ -99,6 +99,24 @@ class ReversiBot:
                         break
             return best
 
+    def calcWinner(self, board):
+        player1 = 0 
+        player2 = 0
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if board[i][j] == 1:
+                    player1 +=1
+                elif board[i][j] == 2:
+                    player2 += 1
+        if player1 > player2:
+            return 1
+        elif player2 > player1:
+            return 2
+        else:
+            return 0
+            
+
+
     def canmove(self, current_turn, str):
         if current_turn == 1:
             opp = 2
