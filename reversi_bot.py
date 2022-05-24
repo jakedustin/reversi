@@ -99,7 +99,7 @@ class ReversiBot:
                         break
             return best
 
-    def calcWinner(self, board):
+    def calcScore(self, board):
         player1 = 0 
         player2 = 0
         for i in range(len(board)):
@@ -109,13 +109,57 @@ class ReversiBot:
                 elif board[i][j] == 2:
                     player2 += 1
         if player1 > player2:
-            return 1
+            return player1
         elif player2 > player1:
-            return 2
+            return player2
         else:
             return 0
-            
+    
+    def calcScore(self, board):
+        player1 = 0 
+        player2 = 0
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if board[i][j] == 1:
+                    player1 +=1
+                elif board[i][j] == 2:
+                    player2 += 1
+        return player1, player2
 
+    def getValueOfState(self, numTiles):
+        
+        strategy={"corners": 10,
+                "adjecentToConers":20,
+                "edges": 10,
+                "totalPoints": 10}
+
+        if numTiles < 20:
+            #constants from [-10,10]
+            # [0]: corners 
+            # [1]: adjecent to corners
+            # [2]: edges
+            # [3]: total numer of points for that move
+
+           
+            #do strategy 1
+            return self.calculateValueOfMove(strategy, self.board)
+            
+        else:
+            #do strategy 2
+            return self.calculateValueOfMove(strategy, self.board)
+    
+    def calculateValueOfMove(self,strategyDict, board, move):
+        #get score for player 1 and 2
+        score1, score2 = self.calcScore(board)
+        #get values for dictionary
+        corner = [[0,0], [7,0],[0,7], [7,7]]
+        cornerAdjecents = [[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]]
+        edges = [[0,2:5], [2:5,0], [7, 2:5], [2:5,7]]
+
+        heursticValue = (strategyDict["corners"] + strategyDict["adjecentToCorners"] + strategyDict["edges"] + 
+        strategyDict["totalPoints"]) * (score1 - score2)
+
+        
 
     def canmove(self, current_turn, str):
         if current_turn == 1:
@@ -164,5 +208,5 @@ class ReversiBot:
                     count += 1
         return count
 
-    def dynamic_heuristic_evaluation_function(self, board):
+ #   def dynamic_heuristic_evaluation_function(self, board):
 
