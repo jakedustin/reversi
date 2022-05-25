@@ -4,6 +4,7 @@ import socket
 import sys
 import time
 
+
 class ReversiServerConnection:
     def __init__(self, host, bot_move_num):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -30,6 +31,7 @@ class ReversiServerConnection:
         move_str = str(7 - move[0]) + '\n' + str(move[1]) + '\n'
         self.sock.send(move_str.encode('utf-8'))
 
+
 class ReversiGame:
     def __init__(self, host, bot_move_num):
         self.bot_move_num = bot_move_num
@@ -50,11 +52,12 @@ class ReversiGame:
                 move = self.bot.make_move(state)
                 self.server_conn.send_move(move)
 
+
 class ReversiGameState:
     def __init__(self, board, turn):
-        self.board_dim = 8 # Reversi is played on an 8x8 board
+        self.board_dim = 8  # Reversi is played on an 8x8 board
         self.board = board
-        self.turn = turn # Whose turn is it
+        self.turn = turn  # Whose turn is it
 
     def capture_will_occur(self, row, col, xdir, ydir, could_capture=0):
         # We shouldn't be able to leave the board

@@ -2,7 +2,8 @@ import numpy as np
 import random as rand
 import math
 import reversi
-import board_helpers.move_locator as ml
+import helpers.move_locator as ml
+import helpers.value_calculator as vc
 
 
 # identify and pick a valid move
@@ -10,13 +11,12 @@ import board_helpers.move_locator as ml
 # implement alpha_beta
 # define heuristic eval function - check the first 5 moves and pick the best one
 
-
 class ReversiBot:
     def __init__(self, move_num):
         self.move_num = move_num
 
     def make_move(self, state):
-        '''
+        """
         This is the only function that needs to be implemented for the lab!
         The bot should take a game state and return a move.
 
@@ -33,118 +33,84 @@ class ReversiBot:
         moves for that state is returned in the form of a list of tuples.
 
         Move should be a tuple (row, col) of the move you want the bot to make.
-        '''
+        """
         valid_moves = state.get_valid_moves()
 
-        #evaluate all the moves in valid_moves and return the best one 
+        # evaluate all the moves in valid_moves and return the best one
 
-        move = rand.choice(valid_moves) # Moves randomly...for now
+        move = rand.choice(valid_moves)  # Moves randomly...for now
         return move
 
-
-    def findBestMove(self, board):
-        bestMove = None 
-        currentMove = None
+    def find_best_move(self, board):
+        best_move = None
+        current_move = None
         # for each move in board
         for i in range(len(board)):
             for j in range(len(board[i])):
-                #if current move is better than best move:
-                    # bestMove = currentMove
-                    if currentMove > bestMove:
-                        bestMove = currentMove
-        return bestMove
+                # if current move is better than best move:
+                # best_move = current_move
+                if current_move > best_move:
+                    best_move = current_move
+        return best_move
 
-    def minimax(self,curDepth, nodeIndex, maxTurn, scores, targetDepth):
-        if curDepth == targetDepth:
+    def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
+        if current_depth == target_depth:
             return
-        if maxTurn:
-            return max(self.minimax(curDepth + 1, nodeIndex * 2,
-                    False, scores, targetDepth),
-                   self.minimax(curDepth + 1, nodeIndex * 2 + 1,
-                    False, scores, targetDepth))
+        if max_turn:
+            return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
+                       self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth))
         else:
-            return min(self.minimax(curDepth + 1, nodeIndex * 2,
-                     True, scores, targetDepth),
-                   self.minimax(curDepth + 1, nodeIndex * 2 + 1,
-                     True, scores, targetDepth))
+            return min(self.minimax(current_depth + 1, node_index * 2, True, scores, target_depth),
+                       self.minimax(current_depth + 1, node_index * 2 + 1, True, scores, target_depth))
 
-    def alpha_beta(self,depth, nodeIndex, maximizingPlayer,
-            values, alpha, beta):
-            #if leaf is reached 
-            if depth == 3:
-                return values[nodeIndex]
-            if maximizingPlayer:
-                best = - math.inf
-                # go through all children left and right
-                for i in range(0,2):
-                    val = self.alpha_beta(depth + 1, nodeIndex * 2 + i,
-                          False, values, alpha, beta)
-                    best = max(best, val)
-                    alpha = max(alpha, best)
-                    #pruning 
-                    if beta <= alpha:
-                        break
-            else:
-                best = math.inf
-                for i in range(0,2):
-                    val = self.alpha_beta(depth + 1, nodeIndex * 2 + i,
-                                True, values, alpha, beta)
-                    best = min(val, best)
-                    beta = min(best, beta)
+    def alpha_beta(self, depth, node_index, maximizing_player,
+                   values, alpha, beta):
+        # if leaf is reached
+        if depth == 3:
+            return values[node_index]
+        if maximizing_player:
+            best = - math.inf
+            # go through all children left and right
+            for i in range(0, 2):
+                val = self.alpha_beta(depth + 1, node_index * 2 + i,
+                                      False, values, alpha, beta)
+                best = max(best, val)
+                alpha = max(alpha, best)
+                # pruning
+                if beta <= alpha:
+                    break
+        else:
+            best = math.inf
+            for i in range(0, 2):
+                val = self.alpha_beta(depth + 1, node_index * 2 + i,
+                                      True, values, alpha, beta)
+                best = min(val, best)
+                beta = min(best, beta)
 
-                    if beta <= alpha:
-                        break
-            return best
-    
-    def calcScore(self, board):
-        player1 = 0 
-        player2 = 0
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if board[i][j] == 1:
-                    player1 +=1
-                elif board[i][j] == 2:
-                    player2 += 1
-        return player1, player2
+                if beta <= alpha:
+                    break
+        return best
 
-    def getValueOfState(self, numTiles, move):
-        
-        strategy={  "corners": 10,
-                    "adjacentToCorners": -10,
-                    "edges": 8,
-                    "totalPoints": 0    }
+    # TODO: move into value_calculator.py
+    def get_value_of_state(self, num_tiles, move):
+        calculator = vc.ValueCalculator()
 
-        if numTiles < 20:
-            #constants from [-10,10]
+        if num_tiles < 20:
+            # constants from [-10,10]
             # [0]: corners 
             # [1]: adjacent to corners
             # [2]: edges
             # [3]: total number of points for that move
-            strategy["totalPoints"] = -5
+            calculator.strategy["totalPoints"] = -5
 
+            # do strategy 1
+            # TODO: make strategy self-referential
+            return calculator.calculateValueOfMove(calculator.strategy, self.board, move)
 
-            #do strategy 1
-            return self.calculateValueOfMove(strategy, self.board, move)
-            
         else:
-            strategy["totalPoints"] = 5
-            #do strategy 2
-            return self.calculateValueOfMove(strategy, self.board, move)
-    
-    def calculateValueOfMove(self, strategyDict, board, move):
-        locator = ml.MoveLocator()
-        #get score for player 1 and 2
-        score1, score2 = self.calcScore(board)
-        #get values for dictionary
-        # corner = np.array([[0,0], [7,0],[0,7], [7,7]])
-        # cornerAdjacent = np.array([[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]])
-        # edges = np.array([[0,[2:5]], [2:5,0], [7, 2:5], [2:5,7]])
-
-        heuristicValue = (strategyDict["corners"] * locator.isCorner(move) + 
-            strategyDict["adjacentToCorners"] * locator.is_corner_adjacent(move) + 
-            strategyDict["edges"] * locator.is_edge(move) + 
-            strategyDict["totalPoints"]) * (score1 - score2)
-        print(heuristicValue)
+            calculator.strategy["totalPoints"] = 5
+            # do strategy 2
+            return calculator.calculateValueOfMove(calculator.strategy, self.board, move)
 
     def can_move(self, current_turn, str):
         if current_turn == 1:
@@ -152,45 +118,43 @@ class ReversiBot:
         else:
             opp = 1
 
-        if (str[0] != opp):
+        if str[0] != opp:
             return False
 
         for i in range(1, 8):
-            if (str[i] == 0):
+            if str[i] == 0:
                 return False
-            if (str[i] == current_turn):
+            if str[i] == current_turn:
                 return True
 
         return False
 
     def is_legal_move(self, current_turn, board, startx, starty):
-        if (board[startx][starty] != 0):
+        if board[startx][starty] != 0:
             return False
 
         str = []
         for dy in range(-1, 2):
             for dx in range(-1, 2):
-                if (dy is None or dx is None):
+                if dy is None or dx is None:
                     continue
                 str[0] = '\0'
                 for ctr in range(1, 8):
-                    x = startx + ctr*dx
-                    y = starty + ctr*dy
+                    x = startx + ctr * dx
+                    y = starty + ctr * dy
                     if (x >= 0 and y >= 0 and x < 8 and y < 8):
-                        str[ctr-1] = board[x][y]
+                        str[ctr - 1] = board[x][y]
                     else:
-                        str[ctr-1] = 0
-                if (self.can_move(current_turn,str)):
+                        str[ctr - 1] = 0
+                if self.can_move(current_turn, str):
                     return True
 
         return False
 
     def num_valid_moves(self, current_turn, board):
         count = 0
-        for i in range(0,8):
-            for j in range(0,8):
-                if (self.is_legal_move(current_turn, board, i, j)):
+        for i in range(0, 8):
+            for j in range(0, 8):
+                if self.is_legal_move(current_turn, board, i, j):
                     count += 1
         return count
-
-
