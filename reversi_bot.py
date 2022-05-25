@@ -2,6 +2,7 @@ import numpy as np
 import random as rand
 import math
 import reversi
+import board_helpers.move_locator as ml
 
 
 # identify and pick a valid move
@@ -106,12 +107,12 @@ class ReversiBot:
                     player2 += 1
         return player1, player2
 
-    def getValueOfState(self, numTiles):
+    def getValueOfState(self, numTiles, move):
         
-        strategy={"corners": 10,
-                "adjacentToCorners":20,
-                "edges": 10,
-                "totalPoints": 10}
+        strategy={  "corners": 10,
+                    "adjacentToCorners": -10,
+                    "edges": 8,
+                    "totalPoints": 0    }
 
         if numTiles < 20:
             #constants from [-10,10]
@@ -119,16 +120,19 @@ class ReversiBot:
             # [1]: adjacent to corners
             # [2]: edges
             # [3]: total number of points for that move
+            strategy["totalPoints"] = -5
 
-           
+
             #do strategy 1
-            return self.calculateValueOfMove(strategy, self.board)
+            return self.calculateValueOfMove(strategy, self.board, move)
             
         else:
+            strategy["totalPoints"] = 5
             #do strategy 2
-            return self.calculateValueOfMove(strategy, self.board)
+            return self.calculateValueOfMove(strategy, self.board, move)
     
-    def calculateValueOfMove(self,strategyDict, board, move):
+    def calculateValueOfMove(self, strategyDict, board, move):
+        locator = ml.MoveLocator()
         #get score for player 1 and 2
         score1, score2 = self.calcScore(board)
         #get values for dictionary
@@ -136,14 +140,11 @@ class ReversiBot:
         # cornerAdjacent = np.array([[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]])
         # edges = np.array([[0,[2:5]], [2:5,0], [7, 2:5], [2:5,7]])
 
-        heuristicValue = (strategyDict["corners"] + strategyDict["adjacentToCorners"] + strategyDict["edges"] + 
-        strategyDict["totalPoints"]) * (score1 - score2)
-
-        
-        
-        
-
-        
+        heuristicValue = (strategyDict["corners"] * locator.isCorner(move) + 
+            strategyDict["adjacentToCorners"] * locator.is_corner_adjacent(move) + 
+            strategyDict["edges"] * locator.is_edge(move) + 
+            strategyDict["totalPoints"]) * (score1 - score2)
+        print(heuristicValue)
 
     def can_move(self, current_turn, str):
         if current_turn == 1:

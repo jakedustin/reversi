@@ -1,3 +1,6 @@
 node_modules/
 
 **/__pycache__/
+
+board_helpers/__pycache__
+tests/__pycache__
