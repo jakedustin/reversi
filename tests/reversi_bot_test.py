@@ -1,19 +1,39 @@
 import unittest
-import reversi_bot
-
-def is_edge(self, move): 
-    if move[0] == 0 or move[0] == 7:
-        print('move: ', str(move))
-        return move[1] < 6 and move[1] > 1 
+import board_helpers.move_locator as ml
 
 class ReversiBotTest(unittest.TestCase):
+    locator = ml.MoveLocator()
 
     def test_is_edge(self):
+        locator = ml.MoveLocator()
         edge = (0, 0,)
-        self.assertFalse(is_edge(self, edge))
+        self.assertFalse(locator.is_edge(edge))
 
         edge = (0, 2,)
-        self.assertTrue(is_edge(self, edge))
+        self.assertTrue(locator.is_edge(edge))
+
+        edge = (3, 7,)
+        self.assertTrue(locator.is_edge(edge))
+
+        edge = (0, 7,)
+        self.assertFalse(locator.is_edge(edge))
+    
+    def test_is_corner(self):
+        locator = ml.MoveLocator()
+        edge = (0, 0,)
+        self.assertTrue(locator.is_corner(edge))
+
+        edge = (0, 7,)
+        self.assertTrue(locator.is_corner(edge))
+
+        edge = (7, 0,)
+        self.assertTrue(locator.is_corner(edge))
+
+        edge = (7, 7,)
+        self.assertTrue(locator.is_corner(edge))
+
+        edge = (3, 3,)
+        self.assertFalse(locator.is_corner(edge))
 
 if __name__ == '__main__':
     unittest.main()
