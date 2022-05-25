@@ -4,10 +4,10 @@ import math
 import reversi
 
 
-# identify an valid move and pick it 
-#implemet minimax
-#implement alphabeta
-#define heurstic eval function - check the first 5 moves and pick the best one
+# identify and pick a valid move
+# implement minimax
+# implement alpha_beta
+# define heuristic eval function - check the first 5 moves and pick the best one
 
 
 class ReversiBot:
@@ -53,10 +53,6 @@ class ReversiBot:
                         bestMove = currentMove
         return bestMove
 
-    
-
-
-
     def minimax(self,curDepth, nodeIndex, maxTurn, scores, targetDepth):
         if curDepth == targetDepth:
             return
@@ -71,7 +67,7 @@ class ReversiBot:
                    self.minimax(curDepth + 1, nodeIndex * 2 + 1,
                      True, scores, targetDepth))
 
-    def alphabeta(self,depth, nodeIndex, maximizingPlayer,
+    def alpha_beta(self,depth, nodeIndex, maximizingPlayer,
             values, alpha, beta):
             #if leaf is reached 
             if depth == 3:
@@ -80,7 +76,7 @@ class ReversiBot:
                 best = - math.inf
                 # go through all children left and right
                 for i in range(0,2):
-                    val = self.alphabeta(depth + 1, nodeIndex * 2 + i,
+                    val = self.alpha_beta(depth + 1, nodeIndex * 2 + i,
                           False, values, alpha, beta)
                     best = max(best, val)
                     alpha = max(alpha, best)
@@ -90,7 +86,7 @@ class ReversiBot:
             else:
                 best = math.inf
                 for i in range(0,2):
-                    val = self.alphabeta(depth + 1, nodeIndex * 2 + i,
+                    val = self.alpha_beta(depth + 1, nodeIndex * 2 + i,
                                 True, values, alpha, beta)
                     best = min(val, best)
                     beta = min(best, beta)
@@ -98,22 +94,6 @@ class ReversiBot:
                     if beta <= alpha:
                         break
             return best
-
-    def calcScore(self, board):
-        player1 = 0 
-        player2 = 0
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if board[i][j] == 1:
-                    player1 +=1
-                elif board[i][j] == 2:
-                    player2 += 1
-        if player1 > player2:
-            return player1
-        elif player2 > player1:
-            return player2
-        else:
-            return 0
     
     def calcScore(self, board):
         player1 = 0 
@@ -129,16 +109,16 @@ class ReversiBot:
     def getValueOfState(self, numTiles):
         
         strategy={"corners": 10,
-                "adjecentToConers":20,
+                "adjacentToCorners":20,
                 "edges": 10,
                 "totalPoints": 10}
 
         if numTiles < 20:
             #constants from [-10,10]
             # [0]: corners 
-            # [1]: adjecent to corners
+            # [1]: adjacent to corners
             # [2]: edges
-            # [3]: total numer of points for that move
+            # [3]: total number of points for that move
 
            
             #do strategy 1
@@ -152,18 +132,20 @@ class ReversiBot:
         #get score for player 1 and 2
         score1, score2 = self.calcScore(board)
         #get values for dictionary
-        # corner = [[0,0], [7,0],[0,7], [7,7]]
-        # cornerAdjecents = [[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]]
-        # edges = [[0,2:5], [2:5,0], [7, 2:5], [2:5,7]]
+        # corner = np.array([[0,0], [7,0],[0,7], [7,7]])
+        # cornerAdjacent = np.array([[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]])
+        # edges = np.array([[0,[2:5]], [2:5,0], [7, 2:5], [2:5,7]])
 
-        heursticValue = (strategyDict["corners"] + strategyDict["adjecentToCorners"] + strategyDict["edges"] + 
+        heuristicValue = (strategyDict["corners"] + strategyDict["adjacentToCorners"] + strategyDict["edges"] + 
         strategyDict["totalPoints"]) * (score1 - score2)
+
+        
         
         
 
         
 
-    def canmove(self, current_turn, str):
+    def can_move(self, current_turn, str):
         if current_turn == 1:
             opp = 2
         else:
@@ -197,7 +179,7 @@ class ReversiBot:
                         str[ctr-1] = board[x][y]
                     else:
                         str[ctr-1] = 0
-                if (self.canmove(current_turn,str)):
+                if (self.can_move(current_turn,str)):
                     return True
 
         return False
@@ -209,5 +191,9 @@ class ReversiBot:
                 if (self.is_legal_move(current_turn, board, i, j)):
                     count += 1
         return count
+
+    def is_edge(self, move): 
+        if move[0] == 0 or move[0] == 7:
+            return move[1] < 6 and move[1] > 1 
 
 
