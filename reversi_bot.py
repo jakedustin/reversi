@@ -192,8 +192,4 @@ class ReversiBot:
                     count += 1
         return count
 
-    def is_edge(self, move): 
-        if move[0] == 0 or move[0] == 7:
-            return move[1] < 6 and move[1] > 1 
-
 
