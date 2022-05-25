@@ -105,12 +105,12 @@ class ReversiBot:
 
             # do strategy 1
             # TODO: make strategy self-referential
-            return calculator.calculateValueOfMove(calculator.strategy, self.board, move)
+            return calculator.calculate_value_of_move(calculator.strategy, self.board, move)
 
         else:
             calculator.strategy["totalPoints"] = 5
             # do strategy 2
-            return calculator.calculateValueOfMove(calculator.strategy, self.board, move)
+            return calculator.calculate_value_of_move(calculator.strategy, self.board, move)
 
     def can_move(self, current_turn, str):
         if current_turn == 1:
