@@ -11,10 +11,6 @@ class ValueCalculator:
         locator = ml.MoveLocator()
         # get score for player 1 and 2
         score1, score2 = self.calculate_score(board)
-        # get values for dictionary
-        # corner = np.array([[0,0], [7,0],[0,7], [7,7]])
-        # cornerAdjacent = np.array([[0,1], [1,1], [1,0], [6,0],[6,1],[7,1], [0,6], [1,6], [1,7], [6,6], [6,7], [7,6]])
-        # edges = np.array([[0,[2:5]], [2:5,0], [7, 2:5], [2:5,7]])
 
         heuristic_value = ((self.utility["corners"] * locator.is_corner(move)) +
                            (self.utility["adjacentToCorners"] * locator.is_corner_adjacent(move)) +

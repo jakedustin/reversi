@@ -92,7 +92,7 @@ class ReversiBot:
         return best
 
     # TODO: move into value_calculator.py
-    def get_value_of_state(self, num_tiles, move):
+    def get_value_of_state(self, num_tiles, board, move):
         calculator = vc.ValueCalculator()
 
         if num_tiles < 20:
@@ -101,16 +101,16 @@ class ReversiBot:
             # [1]: adjacent to corners
             # [2]: edges
             # [3]: total number of points for that move
-            calculator.strategy["totalPoints"] = -5
+            calculator.utility["totalPoints"] = -5
 
             # do strategy 1
             # TODO: make strategy self-referential
-            return calculator.calculate_value_of_move(calculator.strategy, self.board, move)
+            return calculator.calculate_value_of_move(board, move)
 
         else:
-            calculator.strategy["totalPoints"] = 5
+            calculator.utility["totalPoints"] = 5
             # do strategy 2
-            return calculator.calculate_value_of_move(calculator.strategy, self.board, move)
+            return calculator.calculate_value_of_move(board, move)
 
     def can_move(self, current_turn, str):
         if current_turn == 1:
@@ -142,7 +142,7 @@ class ReversiBot:
                 for ctr in range(1, 8):
                     x = startx + ctr * dx
                     y = starty + ctr * dy
-                    if (x >= 0 and y >= 0 and x < 8 and y < 8):
+                    if 0 <= x < 8 and 0 <= y < 8:
                         str[ctr - 1] = board[x][y]
                     else:
                         str[ctr - 1] = 0
