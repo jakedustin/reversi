@@ -35,5 +35,19 @@ class ReversiBotTest(unittest.TestCase):
         edge = (3, 3,)
         self.assertFalse(locator.is_corner(edge))
 
+    def test_is_corner_adjacent(self):
+        locator = ml.MoveLocator()
+        edge = (0, 0,)
+        self.assertFalse(locator.is_corner_adjacent(edge))
+
+        edge = (0, 1,)
+        self.assertTrue(locator.is_corner_adjacent(edge))
+
+        edge = (1, 0,)
+        self.assertTrue(locator.is_corner_adjacent(edge))
+
+        edge = (3, 3,)
+        self.assertFalse(locator.is_corner_adjacent(edge))
+
 if __name__ == '__main__':
     unittest.main()
