@@ -14,10 +14,13 @@ import helpers.state_generator as sg
 
 class ReversiBot:
     max_depth = 5
-    # TODO: make calculator static?
-    calculator = vc.ValueCalculator()
     # TODO: make state generator static
     state_generator = sg.StateGenerator()
+
+    utility = {"corners": 10,
+            "adjacentToCorners": -10,
+            "edges": 8,
+            "totalPoints": 0}
 
     def __init__(self, move_num):
         self.move_num = move_num
@@ -61,7 +64,7 @@ class ReversiBot:
 
         if depth == self.max_depth:
             # TODO: calculate value of state
-            value_state = self.calculator.calculate_value_of_state()
+            value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
             # if generated value > value from parent, return value, moves_taken
             if value_state > value:
                 return [value_state, moves_taken]
@@ -71,8 +74,8 @@ class ReversiBot:
         # maximize
         if depth % 2 == 0:
             # for move in valid_moves
-            for i in range(len(valid_moves)):
-                child_state = self.state_generator.get_child_state(state, valid_moves[i])
+            for move in valid_moves:
+                child_state = self.state_generator.get_child_state(state, move)
                 print("child_state: ")
                 print(str(child_state.board))
                 # get child state
@@ -83,26 +86,26 @@ class ReversiBot:
                 print("do something else")
                 # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, -math.inf, moves_taken.append(move))
 
-    def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
-        if current_depth == target_depth or current_depth == 0:
-            # TODO: calculate the value of the board and return the value
-            score = self.calculator.calculate_player_score()
-            return score
+    # def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
+    #     if current_depth == target_depth or current_depth == 0:
+    #         # TODO: calculate the value of the board and return the value
+    #         score = self.calculator.calculate_player_score()
+    #         return score
 
-        left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
-        right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
+    #     left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
+    #     right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
 
-        # compare results
-        if max_turn:
-            if left_score > right_score:
-                return left_score
-            else:
-                return right_score
-        else:
-            if left_score < right_score:
-                return left_score
-            else:
-                return right_score
+    #     # compare results
+    #     if max_turn:
+    #         if left_score > right_score:
+    #             return left_score
+    #         else:
+    #             return right_score
+    #     else:
+    #         if left_score < right_score:
+    #             return left_score
+    #         else:
+    #             return right_score
 
 
         #     return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
