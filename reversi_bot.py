@@ -21,6 +21,7 @@ class ReversiBot:
         self.move_num = move_num
 
     def make_move(self, state):
+
         """
         This is the only function that needs to be implemented for the lab!
         The bot should take a game state and return a move.
@@ -39,6 +40,7 @@ class ReversiBot:
 
         Move should be a tuple (row, col) of the move you want the bot to make.
         """
+        
         valid_moves = state.get_valid_moves()
         # TODO: apply all valid moves to copies of the state
         # TODO: do that again and again and again and again and again and again until the heuristic proves true

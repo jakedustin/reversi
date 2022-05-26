@@ -1,11 +1,14 @@
+"""Tests for the reversi bot"""
+
 import unittest
 import helpers.move_locator as ml
 
-
 class ReversiBotTest(unittest.TestCase):
+    """Tests for the reversi bot"""
     locator = ml.MoveLocator()
 
     def test_is_edge(self):
+        """Tests for the is_edge method"""
         edge = (0, 0,)
         self.assertFalse(ml.MoveLocator.is_edge(edge))
 
@@ -19,6 +22,7 @@ class ReversiBotTest(unittest.TestCase):
         self.assertFalse(ml.MoveLocator.is_edge(edge))
 
     def test_is_corner(self):
+        """Tests for the is_corner method"""
         edge = (0, 0,)
         self.assertTrue(ml.MoveLocator.is_corner(edge))
 
@@ -35,6 +39,7 @@ class ReversiBotTest(unittest.TestCase):
         self.assertFalse(ml.MoveLocator.is_corner(edge))
 
     def test_is_corner_adjacent(self):
+        """Tests for the is_corner_adjacent method"""
         edge = (0, 0,)
         self.assertFalse(ml.MoveLocator.is_corner_adjacent(edge))
 
