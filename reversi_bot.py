@@ -14,7 +14,9 @@ import helpers.state_generator as sg
 
 class ReversiBot:
     max_depth = 5
+    # TODO: make calculator static?
     calculator = vc.ValueCalculator()
+    # TODO: make state generator static
     state_generator = sg.StateGenerator()
 
     def __init__(self, move_num):
@@ -52,18 +54,6 @@ class ReversiBot:
         move = rand.choice(valid_moves)  # Moves randomly...for now
         return move
 
-    def find_best_move(self, board):
-        best_move = None
-        current_move = None
-        # for each move in board
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                # if current move is better than best move:
-                # best_move = current_move
-                if current_move > best_move:
-                    best_move = current_move
-        return best_move
-
     def minimax_temp(self, state, depth, value, moves_taken):
         valid_moves = state.get_valid_moves()
         print("parent state: ")
@@ -71,7 +61,7 @@ class ReversiBot:
 
         if depth == self.max_depth:
             # TODO: calculate value of state
-            value_state = self.calculator.calculate_value_of_state
+            value_state = self.calculator.calculate_value_of_state()
             # if generated value > value from parent, return value, moves_taken
             if value_state > value:
                 return [value_state, moves_taken]
@@ -95,7 +85,7 @@ class ReversiBot:
 
     def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
         if current_depth == target_depth or current_depth == 0:
-            # TODO: calculate the score and return the score
+            # TODO: calculate the value of the board and return the value
             score = self.calculator.calculate_player_score()
             return score
 
