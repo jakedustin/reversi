@@ -14,10 +14,13 @@ import helpers.state_generator as sg
 
 class ReversiBot:
     max_depth = 5
-    # TODO: make calculator static?
-    calculator = vc.ValueCalculator()
     # TODO: make state generator static
     state_generator = sg.StateGenerator()
+
+    utility = {"corners": 10,
+            "adjacentToCorners": -10,
+            "edges": 8,
+            "totalPoints": 0}
 
     def __init__(self, move_num):
         self.move_num = move_num
@@ -46,8 +49,6 @@ class ReversiBot:
         valid_moves = state.get_valid_moves()
         # TODO: apply all valid moves to copies of the state
         # TODO: do that again and again and again and again and again and again until the heuristic proves true
-        # TODO: make sure the minimax is given an odd number of layers (including the initial state)
-        # TODO: implement changeColors, checkDirection
 
         # evaluate all the moves in valid_moves and return the best one
 
@@ -61,43 +62,87 @@ class ReversiBot:
 
         if depth == self.max_depth:
             # TODO: calculate value of state
-            value_state = self.calculator.calculate_value_of_state()
+            value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
             # if generated value > value from parent, return value, moves_taken
             if value_state > value:
                 return [value_state, moves_taken]
             # else return +-inf, moves_taken
             return [float('inf'), moves_taken]
 
+        # for move in valid_moves
+        for i in range(len(moves_taken), len(valid_moves)):
+            left_state = valid_moves[i * 2]
+            right_state = valid_moves[i * 2 + 1]
+            left_result = self.minimax_temp(left_state, depth + 1, value, moves_taken.append[left_state])
+            right_result = self.minimax_temp(right_state, depth + 1, value, moves_taken.append[right_state])
+
+            # maximize
+            if depth % 2 == 0:
+                if left_result[0] > right_result[0]:
+                    return left_result
+                else:
+                    return right_result
+            # minimize
+            else:
+                if left_result[0] > right_result[0]:
+                    return right_result
+                else:
+                    return left_result
+
         # maximize
-        if depth % 2 == 0:
+        # if depth % 2 == 0:
+            # # for move in valid_moves
+            # for i in range(len(moves_taken), len(valid_moves)):
+            #     left_state = valid_moves[i * 2]
+            #     right_state = valid_moves[i * 2 + 1]
+            #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
+            #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
+            #     if left_result[0] > right_result[0]:
+            #         return left_result
+            #     else:
+            #         return right_result
+        # minimize
+        # else:
             # for move in valid_moves
-            for i in range(len(valid_moves)):
-                child_state = self.state_generator.get_child_state(state, valid_moves[i])
-                print("child_state: ")
-                print(str(child_state.board))
-                # get child state
-                # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, math.inf, moves_taken.append(move))
-        else:
-            # for move in valid_moves
-            for i in range(len(valid_moves)):
-                print("do something else")
-                # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, -math.inf, moves_taken.append(move))
+            # for i in range(len(moves_taken), len(valid_moves)):
+            #     left_state = valid_moves[i * 2]
+            #     right_state = valid_moves[i * 2 + 1]
+            #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
+            #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
+            #     if left_result[0] > right_result[0]:
+            #         return right_result
+            #     else:
+            #         return left_result
 
-    def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
-        if current_depth == target_depth or current_depth == 0:
-            # TODO: calculate the value of the board and return the value
-            score = self.calculator.calculate_player_score()
-            return score
+        #     for move in valid_moves:
+        #         child_state = self.state_generator.get_child_state(state, move)
+        #         print("child_state: ")
+        #         print(str(child_state.board))
+        #         # get child state
+        #         # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, math.inf, moves_taken.append(move))
+        #         # return max(left_score, right_score)
+        # else:
+        #     # for move in valid_moves
+        #     for i in range(len(valid_moves)):
+        #         print("do something else")
+        #         # return min(left_score, right_score)
+        #         # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, -math.inf, moves_taken.append(move))
 
-        left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
-        right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
+    # def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
+    #     if current_depth == target_depth or current_depth == 0:
+    #         # TODO: calculate the value of the board and return the value
+    #         score = self.calculator.calculate_player_score()
+    #         return score
+
+    #     left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
+    #     right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
 
         # compare results
-        if max_turn:
-            return max(left_score, right_score)
-
-        else:
-            return min(left_score, right_score)
+        # if max_turn:
+        #     return max(left_score, right_score)
+        #
+        # else:
+        #     return min(left_score, right_score)
 
 
     def alpha_beta(self, depth, node_index, maximizing_player, values, alpha, beta):

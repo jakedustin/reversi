@@ -12,7 +12,7 @@ class ValueCalculator:
 
 
     # TODO: write method to calculate the utility of a given state
-    @staticmethod
+    @classmethod
     def calculate_state_utility(self, state, strategy, player):
         score = 0
         for i in enumerate(state):
