@@ -73,7 +73,7 @@ class ReversiBot:
             return [float('inf'), moves_taken]
 
         #maximize
-        if depth % 1 == 0:
+        if depth % 2 == 0:
             # for move in valid_moves
             for i in range(len(valid_moves)):
                 print("do something")
