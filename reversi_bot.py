@@ -49,8 +49,6 @@ class ReversiBot:
         valid_moves = state.get_valid_moves()
         # TODO: apply all valid moves to copies of the state
         # TODO: do that again and again and again and again and again and again until the heuristic proves true
-        # TODO: make sure the minimax is given an odd number of layers (including the initial state)
-        # TODO: implement changeColors, checkDirection
 
         # evaluate all the moves in valid_moves and return the best one
 
