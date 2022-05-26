@@ -94,22 +94,11 @@ class ReversiBot:
 
         # compare results
         if max_turn:
-            if left_score > right_score:
-                return left_score
-            else:
-                return right_score
+            return max(left_score, right_score)
+
         else:
-            if left_score < right_score:
-                return left_score
-            else:
-                return right_score
+            return min(left_score, right_score)
 
-
-        #     return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
-        #                self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth))
-        # else:
-        #     return min(self.minimax(current_depth + 1, node_index * 2, True, scores, target_depth),
-        #                self.minimax(current_depth + 1, node_index * 2 + 1, True, scores, target_depth))
 
     def alpha_beta(self, depth, node_index, maximizing_player, values, alpha, beta):
         # if leaf is reached
