@@ -33,13 +33,14 @@ class ValueCalculator:
     # TODO: get rid of probably
     def calculate_value_of_state(self):
         # get score for player 1 and 2
-        score1, score2 = self.calculate_score(board)
+        score = self.calculate_player_score()
 
-        heuristic_value = ((self.utility["corners"] * ml.MoveLocator.is_corner(move)) +
-                           (self.utility["adjacentToCorners"] * ml.MoveLocator.is_corner_adjacent(move)) +
-                           (self.utility["edges"] * ml.MoveLocator.is_edge(move)) +
-                           (self.utility["totalPoints"] * (score1 - score2)))
-        print(heuristic_value)
+        # TODO: figure out what to do with these
+        # heuristic_value = ((self.utility["corners"] * ml.MoveLocator.is_corner(move)) +
+        #                    (self.utility["adjacentToCorners"] * ml.MoveLocator.is_corner_adjacent(move)) +
+        #                    (self.utility["edges"] * ml.MoveLocator.is_edge(move)) +
+        #                    (self.utility["totalPoints"] * score))
+        # print(heuristic_value)
 
     """
      calculates the scores of players one and two given the provided board

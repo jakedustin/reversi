@@ -87,7 +87,9 @@ class ReversiBot:
 
     def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
         if current_depth == target_depth:
-            return
+            # TODO: calculate the score and return the score
+            score = self.calculator.calculate_player_score()
+            return score
         if max_turn:
             return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
                        self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth))
@@ -126,49 +128,3 @@ class ReversiBot:
 
 
 
-    def can_move(self, current_turn, str):
-        if current_turn == 1:
-            opp = 2
-        else:
-            opp = 1
-
-        if str[0] != opp:
-            return False
-
-        for i in range(1, 8):
-            if str[i] == 0:
-                return False
-            if str[i] == current_turn:
-                return True
-
-        return False
-
-    def is_legal_move(self, current_turn, board, startx, starty):
-        if board[startx][starty] != 0:
-            return False
-
-        str = []
-        for dy in range(-1, 2):
-            for dx in range(-1, 2):
-                if dy is None or dx is None:
-                    continue
-                str[0] = '\0'
-                for ctr in range(1, 8):
-                    x = startx + ctr * dx
-                    y = starty + ctr * dy
-                    if 0 <= x < 8 and 0 <= y < 8:
-                        str[ctr - 1] = board[x][y]
-                    else:
-                        str[ctr - 1] = 0
-                if self.can_move(current_turn, str):
-                    return True
-
-        return False
-
-    def num_valid_moves(self, current_turn, board):
-        count = 0
-        for i in range(0, 8):
-            for j in range(0, 8):
-                if self.is_legal_move(current_turn, board, i, j):
-                    count += 1
-        return count
