@@ -73,8 +73,8 @@ class ReversiBot:
         for i in range(len(moves_taken), len(valid_moves)):
             left_state = valid_moves[i * 2]
             right_state = valid_moves[i * 2 + 1]
-            left_result = self.minimax_temp(left_state, depth + 1, value, moves_taken.append[left_state])
-            right_result = self.minimax_temp(right_state, depth + 1, value, moves_taken.append[right_state])
+            left_result = self.minimax(left_state, depth + 1, value, moves_taken.append[left_state])
+            right_result = self.minimax(right_state, depth + 1, value, moves_taken.append[right_state])
 
             # maximize
             if depth % 2 == 0:
