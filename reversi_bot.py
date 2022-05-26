@@ -55,7 +55,7 @@ class ReversiBot:
         move = rand.choice(valid_moves)  # Moves randomly...for now
         return move
 
-    def minimax_temp(self, state, depth, value, moves_taken):
+    def minimax(self, state, depth, value, moves_taken):
         valid_moves = state.get_valid_moves()
         print("parent state: ")
         print(str(state.board))
