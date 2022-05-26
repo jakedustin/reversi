@@ -64,7 +64,7 @@ class ReversiGameState:
         if not self.space_is_on_board(row, col):
             return False
 
-        # If we're on a space associated with our turn and we have pieces
+        # If we're on a space associated with our turn, and we have pieces
         # that could be captured return True. If there are no pieces that
         # could be captured that means we have consecutive bot pieces.
         if self.board[row, col] == self.turn:

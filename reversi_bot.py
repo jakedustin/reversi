@@ -12,6 +12,9 @@ import helpers.value_calculator as vc
 # define heuristic eval function - check the first 5 moves and pick the best one
 
 class ReversiBot:
+    max_depth = 5
+    calculator = vc.ValueCalculator()
+
     def __init__(self, move_num):
         self.move_num = move_num
 
@@ -35,6 +38,10 @@ class ReversiBot:
         Move should be a tuple (row, col) of the move you want the bot to make.
         """
         valid_moves = state.get_valid_moves()
+        # TODO: apply all valid moves to copies of the state
+        # TODO: do that again and again and again and again and again and again until the heuristic proves true
+        # TODO: make sure the minimax is given an odd number of layers (including the initial state)
+        # TODO: implement changeColors, checkDirection
 
         # evaluate all the moves in valid_moves and return the best one
 
@@ -53,6 +60,31 @@ class ReversiBot:
                     best_move = current_move
         return best_move
 
+    def minimax_temp(self, state, depth, value, moves_taken):
+        valid_moves = state.get_valid_moves()
+
+        if depth == self.max_depth:
+            # TODO: calculate value of state
+            value_state = self.calculator.calculate_value_of_state
+            # if generated value > value from parent, return value, moves_taken
+            if value_state > value:
+                return [value_state, moves_taken]
+            # else return +-inf, moves_taken
+            return [float('inf'), moves_taken]
+
+        #maximize
+        if depth % 1 == 0:
+            # for move in valid_moves
+            for i in range(len(valid_moves)):
+                print("do something")
+                # get child state
+                # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, math.inf, moves_taken.append(move))
+        else:
+            # for move in valid_moves
+            for i in range(len(valid_moves)):
+                print("do something else")
+                # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, -math.inf, moves_taken.append(move))
+
     def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
         if current_depth == target_depth:
             return
@@ -63,13 +95,12 @@ class ReversiBot:
             return min(self.minimax(current_depth + 1, node_index * 2, True, scores, target_depth),
                        self.minimax(current_depth + 1, node_index * 2 + 1, True, scores, target_depth))
 
-    def alpha_beta(self, depth, node_index, maximizing_player,
-                   values, alpha, beta):
+    def alpha_beta(self, depth, node_index, maximizing_player, values, alpha, beta):
         # if leaf is reached
         if depth == 3:
             return values[node_index]
         if maximizing_player:
-            best = - math.inf
+            best = -math.inf
             # go through all children left and right
             for i in range(0, 2):
                 val = self.alpha_beta(depth + 1, node_index * 2 + i,
@@ -91,26 +122,9 @@ class ReversiBot:
                     break
         return best
 
-    # TODO: move into value_calculator.py
-    def get_value_of_state(self, num_tiles, board, move):
-        calculator = vc.ValueCalculator()
 
-        if num_tiles < 20:
-            # constants from [-10,10]
-            # [0]: corners 
-            # [1]: adjacent to corners
-            # [2]: edges
-            # [3]: total number of points for that move
-            calculator.utility["totalPoints"] = -5
 
-            # do strategy 1
-            # TODO: make strategy self-referential
-            return calculator.calculate_value_of_move(board, move)
 
-        else:
-            calculator.utility["totalPoints"] = 5
-            # do strategy 2
-            return calculator.calculate_value_of_move(board, move)
 
     def can_move(self, current_turn, str):
         if current_turn == 1:
