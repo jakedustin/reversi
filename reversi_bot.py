@@ -4,6 +4,7 @@ import math
 import reversi
 import helpers.move_locator as ml
 import helpers.value_calculator as vc
+import helpers.state_generator as sg
 
 
 # identify and pick a valid move
@@ -14,6 +15,7 @@ import helpers.value_calculator as vc
 class ReversiBot:
     max_depth = 5
     calculator = vc.ValueCalculator()
+    state_generator = sg.StateGenerator()
 
     def __init__(self, move_num):
         self.move_num = move_num
@@ -62,6 +64,8 @@ class ReversiBot:
 
     def minimax_temp(self, state, depth, value, moves_taken):
         valid_moves = state.get_valid_moves()
+        print("parent state: ")
+        print(str(state.board))
 
         if depth == self.max_depth:
             # TODO: calculate value of state
@@ -72,11 +76,13 @@ class ReversiBot:
             # else return +-inf, moves_taken
             return [float('inf'), moves_taken]
 
-        #maximize
+        # maximize
         if depth % 2 == 0:
             # for move in valid_moves
             for i in range(len(valid_moves)):
-                print("do something")
+                child_state = self.state_generator.get_child_state(state, valid_moves[i])
+                print("child_state: ")
+                print(str(child_state.board))
                 # get child state
                 # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, math.inf, moves_taken.append(move))
         else:

@@ -9,7 +9,7 @@ class StateGenerator:
         new_state = r.ReversiGameState(state.board, temp_turn)
         new_state.board[move[0]][move[1]] = state.turn
         self.change_colors(new_state, move[0], move[1], new_state.turn)
-
+        return new_state
         # TODO: update the whole board, so tiles flip
 
     def change_colors(self, state, row, column, turn):
