@@ -86,16 +86,32 @@ class ReversiBot:
                 # temp_value, temp_moves_taken = minimax_temp(self, child_state, depth + 1, -math.inf, moves_taken.append(move))
 
     def minimax(self, current_depth, node_index, max_turn, scores, target_depth):
-        if current_depth == target_depth:
+        if current_depth == target_depth or current_depth == 0:
             # TODO: calculate the score and return the score
             score = self.calculator.calculate_player_score()
             return score
+
+        left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
+        right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
+
+        # compare results
         if max_turn:
-            return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
-                       self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth))
+            if left_score > right_score:
+                return left_score
+            else:
+                return right_score
         else:
-            return min(self.minimax(current_depth + 1, node_index * 2, True, scores, target_depth),
-                       self.minimax(current_depth + 1, node_index * 2 + 1, True, scores, target_depth))
+            if left_score < right_score:
+                return left_score
+            else:
+                return right_score
+
+
+        #     return max(self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth),
+        #                self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth))
+        # else:
+        #     return min(self.minimax(current_depth + 1, node_index * 2, True, scores, target_depth),
+        #                self.minimax(current_depth + 1, node_index * 2 + 1, True, scores, target_depth))
 
     def alpha_beta(self, depth, node_index, maximizing_player, values, alpha, beta):
         # if leaf is reached
