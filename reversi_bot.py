@@ -75,12 +75,12 @@ class ReversiBot:
             value = float('-inf')
             # for move in valid_moves
             for state in valid_moves:
-                value = max(value, self.minimax(state, depth + 1, value, moves_taken)[0])
+                value = max(value, self.minimax(state, depth + 1, value, moves_taken.append(state)))
                 return [value, moves_taken]
         else:
             value = float('inf')
             for state in valid_moves:
-                value = min(value, self.minimax(state, depth + 1, value, moves_taken)[0])
+                value = min(value, self.minimax(state, depth + 1, value, moves_taken.append(state)))
                 return [value, moves_taken]
                 # left_state = valid_moves[i * 2]
                 # right_state = valid_moves[i * 2 + 1]
