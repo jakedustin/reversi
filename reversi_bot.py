@@ -52,10 +52,10 @@ class ReversiBot:
 
         # evaluate all the moves in valid_moves and return the best one
 
-        move = rand.choice(valid_moves)  # Moves randomly...for now
+        move = self.minimax(state, 0, [], float('-inf'), float('inf'))  # Moves randomly...for now
         return move
 
-    def minimax(self, state, depth, value, moves_taken, alpha, beta):
+    def minimax(self, state, depth, moves_taken, alpha, beta):
         valid_moves = state.get_valid_moves()
         print("parent state: ")
         print(str(state.board))
@@ -74,16 +74,16 @@ class ReversiBot:
         if depth % 2 == 0:
             value = float('-inf')
             # for move in valid_moves
-            for state in valid_moves:
-                value = max(value, self.minimax(state, depth + 1, value, moves_taken.append(state), alpha,beta))
+            for move in valid_moves:
+                value = max(value, self.minimax(state, depth + 1, moves_taken.append(move), alpha,beta))
                 alpha = max(alpha, value_state)
                 if beta <= alpha:
                     break
                 return [value, moves_taken]
         else:
             value = float('inf')
-            for state in valid_moves:
-                value = min(value, self.minimax(state, depth + 1, value, moves_taken.append(state),alpha,beta))
+            for move in valid_moves:
+                value = min(value, self.minimax(state, depth + 1, moves_taken.append(move),alpha,beta))
                 beta = min(beta, value_state)
                 if beta <= alpha:
                     break
