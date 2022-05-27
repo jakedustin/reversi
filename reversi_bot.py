@@ -63,31 +63,42 @@ class ReversiBot:
         if depth == self.max_depth:
             # TODO: calculate value of state
             value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
+            return value_state
             # if generated value > value from parent, return value, moves_taken
-            if value_state > value:
-                return [value_state, moves_taken]
-            # else return +-inf, moves_taken
-            return [float('inf'), moves_taken]
+            # if value_state > value:
+            #     return [value_state, moves_taken]
+            # # else return +-inf, moves_taken
+            # return [float('inf'), moves_taken]
 
-        # for move in valid_moves
-        for i in range(len(moves_taken), len(valid_moves)):
-            left_state = valid_moves[i * 2]
-            right_state = valid_moves[i * 2 + 1]
-            left_result = self.minimax(left_state, depth + 1, value, moves_taken.append[left_state])
-            right_result = self.minimax(right_state, depth + 1, value, moves_taken.append[right_state])
+        # maximize
+        if depth % 2 == 0:
+            value = -float('inf')
+            # for move in valid_moves
+            for state in valid_moves:
+                value = max(value, self.minimax(state, depth + 1, value, moves_taken)[0])
+                return [value, moves_taken]
+        else:
+            value = float('inf')
+            for state in valid_moves:
+                value = min(value, self.minimax(state, depth + 1, value, moves_taken)[0])
+                return [value, moves_taken]
+                # left_state = valid_moves[i * 2]
+                # right_state = valid_moves[i * 2 + 1]
+                # left_result = self.minimax(left_state, depth + 1, value, moves_taken.append[left_state])
+                # right_result = self.minimax(right_state, depth + 1, value, moves_taken.append[right_state])
 
             # maximize
-            if depth % 2 == 0:
-                if left_result[0] > right_result[0]:
-                    return left_result
-                else:
-                    return right_result
-            # minimize
-            else:
-                if left_result[0] > right_result[0]:
-                    return right_result
-                else:
-                    return left_result
+            # if depth % 2 == 0:
+            #     if left_result[0] > right_result[0]:
+            #         return left_result
+            #     else:
+            #         return right_result
+            # # minimize
+            # else:
+            #     if left_result[0] > right_result[0]:
+            #         return right_result
+            #     else:
+            #         return left_result
 
         # maximize
         # if depth % 2 == 0:
