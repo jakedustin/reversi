@@ -89,45 +89,45 @@ class ReversiBot:
                 else:
                     return left_result
 
-        def alpha_beta(self, state, depth, value, moves_taken, alpha, beta):
-            valid_moves = state.get_valid_moves()
-            print("parent state: ")
-            print(str(state.board))
+    def alpha_beta(self, state, depth, value, moves_taken, alpha, beta):
+        valid_moves = state.get_valid_moves()
+        print("parent state: ")
+        print(str(state.board))
 
-            if depth == self.max_depth:
-                # TODO: calculate value of state
-                value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
-                # if generated value > value from parent, return value, moves_taken
-                if value_state > value:
-                    return [value_state, moves_taken]
-                # else return +-inf, moves_taken
-                return [float('inf'), moves_taken]
+        if depth == self.max_depth:
+            # TODO: calculate value of state
+            value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
+            # if generated value > value from parent, return value, moves_taken
+            if value_state > value:
+                return [value_state, moves_taken]
+            # else return +-inf, moves_taken
+            return [float('inf'), moves_taken]
 
-            # for move in valid_moves
-            for i in range(len(moves_taken), len(valid_moves)):
-                left_state = valid_moves[i * 2]
-                right_state = valid_moves[i * 2 + 1]
-                left_result = self.alpha_beta(left_state, depth + 1, value, moves_taken.append[left_state], alpha,beta)
-                right_result = self.alpha_beta(right_state, depth + 1, value, moves_taken.append[right_state],alpha,beta)
+        # for move in valid_moves
+        for i in range(len(moves_taken), len(valid_moves)):
+            left_state = valid_moves[i * 2]
+            right_state = valid_moves[i * 2 + 1]
+            left_result = self.alpha_beta(left_state, depth + 1, value, moves_taken.append[left_state], alpha,beta)
+            right_result = self.alpha_beta(right_state, depth + 1, value, moves_taken.append[right_state],alpha,beta)
 
-                # maximize
-                if depth % 2 == 0:
-                    alpha = max(alpha, value_state)
-                    if alpha >= beta:
-                            break
-                    if left_result[0] > right_result[0]:
-                        return left_result
-                    else:
-                        return right_result
-                # minimize
-                else:
-                    beta = min(beta, value_state)
-                    if beta <= alpha:
+            # maximize
+            if depth % 2 == 0:
+                alpha = max(alpha, value_state)
+                if alpha >= beta:
                         break
-                    if left_result[0] > right_result[0]:
-                        return right_result
-                    else:
-                        return left_result
+                if left_result[0] > right_result[0]:
+                    return left_result
+                else:
+                    return right_result
+            # minimize
+            else:
+                beta = min(beta, value_state)
+                if beta <= alpha:
+                    break
+                if left_result[0] > right_result[0]:
+                    return right_result
+                else:
+                    return left_result
 
 
         # maximize
