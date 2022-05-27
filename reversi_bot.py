@@ -72,7 +72,7 @@ class ReversiBot:
 
         # maximize
         if depth % 2 == 0:
-            value = -float('inf')
+            value = float('-inf')
             # for move in valid_moves
             for state in valid_moves:
                 value = max(value, self.minimax(state, depth + 1, value, moves_taken)[0])
