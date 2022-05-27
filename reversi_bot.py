@@ -55,7 +55,7 @@ class ReversiBot:
         move = rand.choice(valid_moves)  # Moves randomly...for now
         return move
 
-    def minimax(self, state, depth, value, moves_taken):
+    def minimax(self, state, depth, value, moves_taken, alpha, beta):
         valid_moves = state.get_valid_moves()
         print("parent state: ")
         print(str(state.board))
@@ -75,12 +75,18 @@ class ReversiBot:
             value = float('-inf')
             # for move in valid_moves
             for state in valid_moves:
-                value = max(value, self.minimax(state, depth + 1, value, moves_taken.append(state)))
+                value = max(value, self.minimax(state, depth + 1, value, moves_taken.append(state), alpha,beta))
+                alpha = max(alpha, value_state)
+                if beta <= alpha:
+                    break
                 return [value, moves_taken]
         else:
             value = float('inf')
             for state in valid_moves:
-                value = min(value, self.minimax(state, depth + 1, value, moves_taken.append(state)))
+                value = min(value, self.minimax(state, depth + 1, value, moves_taken.append(state),alpha,beta))
+                beta = min(beta, value_state)
+                if beta <= alpha:
+                    break
                 return [value, moves_taken]
                 # left_state = valid_moves[i * 2]
                 # right_state = valid_moves[i * 2 + 1]
@@ -100,40 +106,7 @@ class ReversiBot:
             #     else:
             #         return left_result
 
-    def alpha_beta(self, state, depth, value, moves_taken, alpha, beta):
-        valid_moves = state.get_valid_moves()
-        print("parent state: ")
-        print(str(state.board))
-
-        if depth == self.max_depth:
-            # TODO: calculate value of state
-            value_state = vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn)
-            return value_state
-            # if generated value > value from parent, return value, moves_taken
-            # if value_state > value:
-            #     return [value_state, moves_taken]
-            # # else return +-inf, moves_taken
-            # return [float('inf'), moves_taken]
-
-        # maximize
-        if depth % 2 == 0:
-            value = -float('inf')
-            # for move in valid_moves
-            for state in valid_moves:
-                value = max(value, self.alpha_beta(state, depth + 1, value, moves_taken.append(state), alpha,beta))
-                # return [value, moves_taken]
-                alpha = max(alpha, value_state)
-                if beta <= alpha:
-                    break
-                return [value, moves_taken]
-        else:
-            value = float('inf')
-            for state in valid_moves:
-                value = min(value, self.alpha_beta(state, depth + 1, value, moves_taken.append(state), alpha, beta))
-                beta = min(beta, value_state)
-                if beta <= alpha:
-                    break
-                return [value, moves_taken]
+   
 
         # maximize
         # if depth % 2 == 0:
