@@ -75,7 +75,8 @@ class ReversiBot:
             value = float('-inf')
             # for move in valid_moves
             for move in valid_moves:
-                value = max(value, self.minimax(state, depth + 1, moves_taken.append(move), alpha,beta))
+                child_state = self.state_generator.get_child_state(state, move)
+                value = max(value, self.minimax(child_state, depth + 1, moves_taken.append(move), alpha,beta))
                 alpha = max(alpha, value_state)
                 if beta <= alpha:
                     break
@@ -83,7 +84,8 @@ class ReversiBot:
         else:
             value = float('inf')
             for move in valid_moves:
-                value = min(value, self.minimax(state, depth + 1, moves_taken.append(move),alpha,beta))
+                child_state = self.state_generator.get_child_state(state, move)
+                value = min(value, self.minimax(child_state, depth + 1, moves_taken.append(move),alpha,beta))
                 beta = min(beta, value_state)
                 if beta <= alpha:
                     break
