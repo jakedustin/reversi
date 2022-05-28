@@ -46,14 +46,14 @@ class ReversiBot:
         Move should be a tuple (row, col) of the move you want the bot to make.
         """
         
-        valid_moves = state.get_valid_moves()
+        # valid_moves = state.get_valid_moves()
         # TODO: apply all valid moves to copies of the state
         # TODO: do that again and again and again and again and again and again until the heuristic proves true
 
         # evaluate all the moves in valid_moves and return the best one
 
-        move = self.minimax(state, 0, [], float('-inf'), float('inf'))  # Moves randomly...for now
-        return move
+        [value, moves_taken] = self.minimax(state, 0, [], float('-inf'), float('inf'))  # Moves randomly...for now
+        return moves_taken[len(moves_taken)-1]
 
     def minimax(self, state, depth, moves_taken, alpha, beta):
         valid_moves = state.get_valid_moves()
@@ -77,7 +77,7 @@ class ReversiBot:
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
                 value = max(value, self.minimax(child_state, depth + 1, moves_taken.append(move), alpha,beta))
-                alpha = max(alpha, value_state)
+                alpha = max(alpha, value)
                 if beta <= alpha:
                     break
                 return [value, moves_taken]
@@ -86,7 +86,7 @@ class ReversiBot:
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
                 value = min(value, self.minimax(child_state, depth + 1, moves_taken.append(move),alpha,beta))
-                beta = min(beta, value_state)
+                beta = min(beta, value)
                 if beta <= alpha:
                     break
                 return [value, moves_taken]
