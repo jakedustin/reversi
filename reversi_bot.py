@@ -18,9 +18,9 @@ class ReversiBot:
     state_generator = sg.StateGenerator()
 
     utility = {"corners": 10,
-            "adjacentToCorners": -10,
-            "edges": 8,
-            "totalPoints": 0}
+               "adjacentToCorners": -10,
+               "edges": 8,
+               "totalPoints": 0}
 
     def __init__(self, move_num):
         self.move_num = move_num
@@ -45,18 +45,19 @@ class ReversiBot:
 
         Move should be a tuple (row, col) of the move you want the bot to make.
         """
-        
+
         # valid_moves = state.get_valid_moves()
-        # TODO: apply all valid moves to copies of the state
-        # TODO: do that again and again and again and again and again and again until the heuristic proves true
 
         # evaluate all the moves in valid_moves and return the best one
 
-        [value, moves_taken] = self.minimax(state, 0, [], float('-inf'), float('inf'))  # Moves randomly...for now
-        return moves_taken[len(moves_taken)-1]
+        [value, moves_taken] = self.minimax(state, 0, [(-1, -1,)], float('-inf'), float('inf'))
+        return moves_taken[1]
 
     def minimax(self, state, depth, moves_taken, alpha, beta):
         valid_moves = state.get_valid_moves()
+        print("valid moves:")
+        print(str(valid_moves) + '\n')
+
         print("parent state: ")
         print(str(state.board))
 
@@ -72,20 +73,25 @@ class ReversiBot:
 
         # maximize
         if depth % 2 == 0:
-            value = float('-inf')
             # for move in valid_moves
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
-                value = max(value, self.minimax(child_state, depth + 1, moves_taken.append(move), alpha,beta))
+                moves_taken.append(move)
+                # TODO: need to remove moves that won't be bubbled up
+                print("moves taken: " + str(moves_taken))
+                value = max(alpha, self.minimax(child_state, depth + 1, moves_taken, alpha, beta))
+                print("child state generated: ")
+                print(str(child_state))
                 alpha = max(alpha, value)
                 if beta <= alpha:
                     break
                 return [value, moves_taken]
         else:
-            value = float('inf')
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
-                value = min(value, self.minimax(child_state, depth + 1, moves_taken.append(move),alpha,beta))
+                moves_taken.append(move)
+                print("moves taken: " + str(moves_taken))
+                value = min(beta, self.minimax(child_state, depth + 1, moves_taken, alpha, beta))
                 beta = min(beta, value)
                 if beta <= alpha:
                     break
@@ -108,32 +114,30 @@ class ReversiBot:
             #     else:
             #         return left_result
 
-   
-
         # maximize
         # if depth % 2 == 0:
-            # # for move in valid_moves
-            # for i in range(len(moves_taken), len(valid_moves)):
-            #     left_state = valid_moves[i * 2]
-            #     right_state = valid_moves[i * 2 + 1]
-            #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
-            #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
-            #     if left_result[0] > right_result[0]:
-            #         return left_result
-            #     else:
-            #         return right_result
+        # # for move in valid_moves
+        # for i in range(len(moves_taken), len(valid_moves)):
+        #     left_state = valid_moves[i * 2]
+        #     right_state = valid_moves[i * 2 + 1]
+        #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
+        #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
+        #     if left_result[0] > right_result[0]:
+        #         return left_result
+        #     else:
+        #         return right_result
         # minimize
         # else:
-            # for move in valid_moves
-            # for i in range(len(moves_taken), len(valid_moves)):
-            #     left_state = valid_moves[i * 2]
-            #     right_state = valid_moves[i * 2 + 1]
-            #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
-            #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
-            #     if left_result[0] > right_result[0]:
-            #         return right_result
-            #     else:
-            #         return left_result
+        # for move in valid_moves
+        # for i in range(len(moves_taken), len(valid_moves)):
+        #     left_state = valid_moves[i * 2]
+        #     right_state = valid_moves[i * 2 + 1]
+        #     left_result = self.minimax_temp(left_state, depth+1,value,moves_taken.append[left_state])
+        #     right_result = self.minimax_temp(right_state, depth+1,value,moves_taken.append[right_state])
+        #     if left_result[0] > right_result[0]:
+        #         return right_result
+        #     else:
+        #         return left_result
 
         #     for move in valid_moves:
         #         child_state = self.state_generator.get_child_state(state, move)
@@ -158,16 +162,9 @@ class ReversiBot:
     #     left_score = self.minimax(current_depth + 1, node_index * 2, False, scores, target_depth)
     #     right_score = self.minimax(current_depth + 1, node_index * 2 + 1, False, scores, target_depth)
 
-        # compare results
-        # if max_turn:
-        #     return max(left_score, right_score)
-        #
-        # else:
-        #     return min(left_score, right_score)
-
-
-    
-
-
-
-
+    # compare results
+    # if max_turn:
+    #     return max(left_score, right_score)
+    #
+    # else:
+    #     return min(left_score, right_score)

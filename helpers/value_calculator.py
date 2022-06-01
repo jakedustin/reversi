@@ -12,17 +12,21 @@ class ValueCalculator:
 
 
     # TODO: write method to calculate the utility of a given state
-    @classmethod
-    def calculate_state_utility(self, state, strategy, player):
+    @staticmethod
+    def calculate_state_utility(state, strategy, player):
+        print("calculating state utility")
+        """returns an integer valuation of the provided state"""
         score = 0
-        for i in enumerate(state):
-            for j in enumerate(state[i]):
-                if state[i][j] == player:
+        print("state.board: \n" + str(state.board))
+        for i in range(len(state.board)):
+            for j in range(len(state.board[i])):
+                if state.board[i][j] == player:
                     score += 1
         return score
 
     # heuristic_value = ((self.utility["corners"] * ml.MoveLocator.is_corner(move)) +
-    #                    (self.utility["adjacentToCorners"] * ml.MoveLocator.is_corner_adjacent(move)) +
+    #                    (self.utility["adjacentToCorners"] *
+    #                       ml.MoveLocator.is_corner_adjacent(move)) +
     #                    (self.utility["edges"] * ml.MoveLocator.is_edge(move)) +
     #                    (self.utility["totalPoints"] * score))
     # print(heuristic_value)
