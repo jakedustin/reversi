@@ -16,7 +16,7 @@ class TestStateGenerator(TestCase):
          [0, 0, 0, 0, 0, 0, 0, 0], 
          [0, 0, 0, 0, 0, 0, 0, 0]])
     state = r.ReversiGameState(test_board, 2)
-    generator = sg.StateGenerator()
+    generator = sg
 
     def test_get_child_state(self):
         # create a copy of the above board
@@ -34,7 +34,8 @@ class TestStateGenerator(TestCase):
          [0, 0, 0, 0, 0, 0, 0, 0], 
          [0, 0, 0, 0, 0, 0, 0, 0]])
         self.generator.change_colors(self.state, 0, 7)
-        TestCase.assertTrue(np.equal(self.state.board, color_changed_board),
-                            "Arguments are not equal: \n" + str(self.test_board) + "\n\n" + str(color_changed_board))
+        for i in range(len(self.state.board)):
+            for j in range(len(self.state.board[i])):
+                TestCase.assertEqual(self, self.state.board[i][j], color_changed_board[i][j])
         print(str(self.state.board))
         print(str(color_changed_board))
