@@ -1,6 +1,18 @@
 """Helps to determine the location of a given node within the board"""
+
+
 class MoveLocator:
     """Helps to determine the location of a given node within the board"""
+
+    @staticmethod
+    def get_move_value(x, y, utility):
+        if MoveLocator.is_edge((x, y,)):
+            return utility["edge"]
+        if MoveLocator.is_corner((x, y,)):
+            return utility["corner"]
+        if MoveLocator.is_corner_adjacent((x, y,)):
+            return utility["adjacent"]
+        return 1
 
     @staticmethod
     def is_edge(move):
