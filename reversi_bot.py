@@ -1,10 +1,5 @@
-import numpy as np
-import random as rand
-import math
-import reversi
-import helpers.move_locator as ml
-import helpers.value_calculator as vc
 import helpers.state_generator as sg
+import helpers.value_calculator as vc
 
 
 # identify and pick a valid move
@@ -14,7 +9,6 @@ import helpers.state_generator as sg
 
 class ReversiBot:
     max_depth = 5
-    # TODO: make state generator static
     state_generator = sg
 
     utility = {"corners": 10,

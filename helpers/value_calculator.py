@@ -5,15 +5,6 @@ import helpers.move_locator as ml
 class ValueCalculator:
     """calculates the value of a given state"""
 
-    utility = {"corners": 10,
-               "adjacentToCorners": -10,
-               "edges": 8,
-               "totalPoints": 0}
-
-    # if corners are empty then the corner adjacent pieces are very negative
-    # if corners are not empty then corner adjacent pieces are neutral
-    # this board works for the value of a turn, but not the value of a board
-    # TODO: write method to calculate the utility of a given state
     @staticmethod
     def calculate_state_utility(state, player):
         """returns an integer valuation of the provided state"""
