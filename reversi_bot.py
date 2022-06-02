@@ -13,7 +13,7 @@ import helpers.state_generator as sg
 # define heuristic eval function - check the first 5 moves and pick the best one
 
 class ReversiBot:
-    max_depth = 5
+    max_depth = 7
     # TODO: make state generator static
     state_generator = sg
 
@@ -36,19 +36,19 @@ class ReversiBot:
             return{"val": 0, "move": (-1, -1)}
 
         if depth == self.max_depth:
-            return {"val": vc.ValueCalculator.calculate_state_utility(state, self.utility, state.turn), "move": move}
+            return {"val": vc.ValueCalculator.calculate_state_utility(state, state.turn), "move": move}
 
         if depth % 2 == 0:
             best_val = float('-inf')
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
-                print("Calling minimax with: ")
-                print("state: ")
-                print(str(child_state.board))
-                print("depth: " + str(depth + 1))
-                print("move: " + str(move))
+                # print("Calling minimax with: ")
+                # print("state: ")
+                # print(str(child_state.board))
+                # print("depth: " + str(depth + 1))
+                # print("move: " + str(move))
                 minimax_dict = self.minimax(child_state, depth + 1, move, alpha, beta)
-                print("minimax returned: " + minimax_dict.__str__())
+                # print("minimax returned: " + minimax_dict.__str__())
                 best_val = max(best_val, minimax_dict["val"])
                 alpha = max(best_val, alpha)
                 if beta <= alpha:
@@ -58,13 +58,13 @@ class ReversiBot:
             best_val = float('inf')
             for move in valid_moves:
                 child_state = self.state_generator.get_child_state(state, move)
-                print("Calling minimax with: ")
-                print("state: ")
-                print(str(child_state.board))
-                print("depth: " + str(depth + 1))
-                print("move: " + str(move))
+                # print("Calling minimax with: ")
+                # print("state: ")
+                # print(str(child_state.board))
+                # print("depth: " + str(depth + 1))
+                # print("move: " + str(move))
                 minimax_dict = self.minimax(child_state, depth + 1, move, alpha, beta)
-                print("minimax returned: " + minimax_dict.__str__())
+                # print("minimax returned: " + minimax_dict.__str__())
                 best_val = min(best_val, minimax_dict["val"])
                 beta = min(best_val, beta)
                 if beta <= alpha:
